@@ -3,10 +3,8 @@ class Team(object):
     def __init__(self, name):
         self.name = name
 
-    def buildTeam(self, rushingData, passingData, kickingData, returningData, puntingData, playData):
+    def buildTeam(self, rushingData, passingData, kickingData, returningData, puntingData, downData, playData):
         self.playData = playData
-        self.perRush = rushingData[self.name][0] / (rushingData[self.name][0] + passingData[self.name][0])
-        self.perPass = 1 - self.perRush
         self.rushYA = rushingData[self.name][2]
         self.rushLong = rushingData[self.name][3]
         self.passYA = passingData[self.name][4]
@@ -21,3 +19,5 @@ class Team(object):
         self.epComp = kickingData[self.name][6]
         self.puntYA = puntingData[self.name][3]
         self.puntLong = puntingData[self.name][2]
+        self.rush1 = downData[self.name][1] / (downData[self.name][1] + downData[self.name][2])
+        self.pass1 = downData[self.name][2] / (downData[self.name][1] + downData[self.name][2])

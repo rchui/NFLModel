@@ -14,11 +14,13 @@ passingData = dataReader.statReader("Passing.csv")
 kickingData = dataReader.statReader("Kicking.csv")
 returningData = dataReader.statReader("Returning.csv")
 puntingData = dataReader.statReader("Punting.csv")
+downData = dataReader.statReader("Down.csv")
 
 # Read in play percentages
 playData = dataReader.playReader("Percent.csv")
 
+# Build Team
 team = Team(name)
-team.buildTeam(rushingData, passingData, kickingData, returningData, puntingData, playData)
+team.buildTeam(rushingData, passingData, kickingData, returningData, puntingData, downData, playData)
 
 

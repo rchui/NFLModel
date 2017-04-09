@@ -139,30 +139,34 @@ class Team(object):
         elif down == 3:
             if distance > 4:
                 return passing()
-            else:
+            else: 
                 if random.random() > 0.5:
                     return rushing()
                 else:
                     return passing()
         else:
+            # Kick field goal if in range
             if 100 - field + 17 <= self.fgLong and distance > 2:
                 return "fg"
+            # If close enough maybe go for it on 4th
             elif 100 - field + 17 <= self.fgLong and distance  < 3:
-                if random.random() < 0.95:
+                if random.random() < 0.90:
                     return "fg"
                 else:
                     if distance == 1:
                         return rushing()
                     else:
                         return passing()
+            # If close but not in range sometimes go for it
             elif 100 - field > 50 and distance < 3:
-                if random.random() > 0.5:
+                if random.random() > 0.975:
                     if distance == 1:
                         return rushing()
                     else:
                         return passing()
                 else:
                     return "punt"
+            # Otherwise punt
             else:
                 return "punt"
 

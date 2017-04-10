@@ -40,19 +40,5 @@ team2.buildTeam(rushingData, passingData, kickingData, returningData, puntingDat
 
 game = Game(team1, team2)
 game.startGame()
-
-# Choose a play
-# play = team1.nextPlay(down, distance, field)
-# if play == "fg":
-    # print("Attempting Field Goal: ")
-    # if team1.fgComp / 100 > random.random():
-        # print(str(100 - field + 17) + " yard field goal completed\n")
-    # else:
-        # print(str(100 - field + 17) + " field goal missed\n")
-# elif play == "punt":
-    # print("Punting: ")
-    # puntDeviation = (team1.puntLong - team1.puntYA) / 3
-    # puntDistance = team1.puntYA - random.randint(0, 3) * puntDeviation + random.randint(0, 3) * puntDeviation
-    # print("Punted " + str(int(round(puntDistance))) + " yards\n")
-# else:
-    # print(str(int(play)) + " yards\n")
+while(game.quarter == 1):
+    game.playGame(game.possession)

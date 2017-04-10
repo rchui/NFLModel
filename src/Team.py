@@ -81,7 +81,7 @@ class Team(object):
                 else:
                     direct = "Middle"
                 print("Long Pass " + direct + ": ")
-                return max(round(random.uniform(self.passYA, self.passLong) - random.randint(round(self.passYA), round(self.passLong))), 0)
+                return max(round(random.uniform(self.passYA, self.passLong) - random.randint(round(self.passYA), round(self.passLong))), 10)
 
         def rushing():
             """ Determines rushing distance """
@@ -115,11 +115,13 @@ class Team(object):
 
             if playPer < self.rushLeftTackle:
                 print("Rush Left Tackle: ")
-                return round(random.uniform(self.rushYA, self.rushLong) - random.randint(round(self.rushYA), round(self.rushLong)))
+                playDist = round(random.uniform(self.rushYA, self.rushLong) - random.randint(round(self.rushYA), round(self.rushLong)))
+                return max(random.randint(-5, 0), playDist)
             perTracker += self.rushLeftTackle
             
             print("Rush Right Tackle: ")
-            return round(random.uniform(self.rushYA, self.rushLong) - random.randint(round(self.rushYA), round(self.rushLong)))
+            playDist = round(random.uniform(self.rushYA, self.rushLong) - random.randint(round(self.rushYA), round(self.rushLong)))
+            return max(random.randint(-5, 0), playDist)
 
         if down == 1:
             if self.rush1 > random.random():

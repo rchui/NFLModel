@@ -190,31 +190,34 @@ class Team(object):
     def playProb(self, down, distance, field):
         def passing(prob):
             """ Determines passing distance """
-            direct = ["Left", "Right", "Middle"]
+            direct = ["left", "right", "middle"]
 
             if random.random() < 0.80: # short pass
                 prob *= 0.80
                 if random.random() < self.passComp:
                     prob *= self.passComp
-                    return "pass short", prob
+                    return "pass " + random.choice(direct) + " short", prob
                 else:
                     prob *= 1 - self.passComp
-                    return "pass short", prob
+                    return "pass " + random.choice(direct) + " short", prob
 
             else: # long pass:
                 choice = random.random()
                 if choice < 0.4:
                     prob *= 0.4
+                    direct = "left"
                 elif choice < 0.8:
                     prob *= 0.4
+                    direct = "right"
                 else:
                     prob *= 0.2
+                    direct = "middle"
                 if random.random() < self.passComp:
                     prob *= self.passComp
-                    return "pass long", prob
+                    return "pass " + direct + " long", prob
                 else:
                     prob *= 1 - self.passComp
-                    return "pass long", prob
+                    return "pass " + direct + " long", prob
 
         def rushing(prob):
             """ Determines rushing distance """

@@ -39,16 +39,25 @@ team = Team(name)
 team.buildTeam(rushingData, passingData, kickingData, returningData, puntingData, downData, playData)
 
 # Choose a play
+playSet = {}
 play = ""
 percent = 0.0
 for i in range(1000):
-    tempPlay, tempPercent = team.playProb(down, distance, field)
-    if tempPercent > percent:
-        percent = tempPercent
-        play = tempPlay
+    playTemp, percentTemp = team.playProb(down, distance, field)
+    if playTemp not in playSet.keys():
+        playSet[playTemp] = percentTemp
+    if percent < percentTemp:
+        play = playTemp
+        percent = percentTemp
+
+print("")
+for i in playSet.keys():
+    print(i + ", " + str(playSet[i]))
+print("")
+
 if play == "fg":
-    print("Kicking field goal with " + str("{:3.2f}".format(percent * 100)) + "% probability")
+    print("Kicking field goal with " + str("{:3.2f}".format(percent * 100)) + "% probability\n")
 elif play == "punt":
-    print("Punting with " + str("{:3.2f}".format(percent * 100)) + "% probability")
+    print("Punting with " + str("{:3.2f}".format(percent * 100)) + "% probability\n")
 else:
-    print(play + " with " + str("{:3.2f}".format(percent * 100)) + "% probability")
+    print(play + " with " + str("{:3.2f}".format(percent * 100)) + "% probability\n")

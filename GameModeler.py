@@ -42,7 +42,7 @@ team1Count = 0
 team2Count = 0
 tieCount = 0
 
-fileWriter = open("output.txt", 'w')
+fileWrite = open("output.txt", 'w')
 for i in range(1000):
     game = Game(team1, team2)
     game.startGame()

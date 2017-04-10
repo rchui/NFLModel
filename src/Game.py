@@ -3,8 +3,6 @@ import sys
 
 class Game(object):
 
-    """Docstring for Game. """
-
     def __init__(self, team1, team2):
         self.team1 = team1
         self.team2 = team2
@@ -141,14 +139,16 @@ class Game(object):
             print(str(int(play)) + " yards")
             processPlay(play, "success", team, int(play))
 
+    
     def displayGame(self):
+        """ Print a graphical display of the field """
         sys.stdout.write("|")
         for i in range(99):
             sys.stdout.write("-")
         sys.stdout.write("|\n")
         sys.stdout.flush()
 
-        for i in range(4):
+        for i in range(2):
             sys.stdout.write("|")
             for j in range(10):
                 sys.stdout.write("         |")
@@ -171,7 +171,7 @@ class Game(object):
         sys.stdout.write("|\n")
         sys.stdout.flush()
 
-        for i in range(4):
+        for i in range(2):
             sys.stdout.write("|")
             for j in range(10):
                 sys.stdout.write("         |")

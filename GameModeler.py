@@ -38,17 +38,27 @@ team1.buildTeam(rushingData, passingData, kickingData, returningData, puntingDat
 team2 = Team(name2)
 team2.buildTeam(rushingData, passingData, kickingData, returningData, puntingData, downData, playData)
 
+team1Count = 0
+team2Count = 0
+tieCount = 0
+
 fileWriter = open("output.txt", 'w')
-for i in range(1):
+for i in range(1000):
     game = Game(team1, team2)
     game.startGame()
     while(game.quarter <= 4):
         game.playGame(game.possession)
         game.displayGame()
     if game.score1 > game.score2:
-        fileWriter.write(game.team1.name + "\n")
+        fileWriter.write(game.team1.name + "," + str(game.score1) + "," + str(game.score2) + "\n")
+        team1Count += 1
     elif game.score2 > game.score1:
-        fileWriter.write(game.team2.name + "\n")
+        fileWriter.write(game.team2.name + "," + str(game.score2) + "," + str(game.score1) + "\n")
+        team2Count += 1
     else:
-        fileWriter.write("Tie\n")
+        fileWriter.write("Tie" + "," + str(game.score1) + "," + str(game.score2) + "\n")
+        tieCount += 1
+print(team1.name + " win: " + str(float(team1Count) / float(team1Count + team2Count + tieCount) * 100) + "%")
+print(team2.name + " win: " + str(float(team2Count) / float(team1Count + team2Count + tieCount) * 100) + "%")
+print("Tie: " + str(float(tieCount) / float(team1Count + team2Count + tieCount) * 100) + "%")
 fileWriter.close()

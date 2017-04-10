@@ -1,6 +1,5 @@
 import random
-
-
+import sys
 
 class Game(object):
 
@@ -95,7 +94,7 @@ class Game(object):
                     else:
                         self.score2 += 7
                     switchPoss()
-        
+
             # Print box
             if self.possession == 1:
                 print("\t*")
@@ -104,8 +103,18 @@ class Game(object):
             print("\t" + self.team1.name[:7] + "\t\t" + self.team2.name[:7])
             print("\t" + str(self.score1) + "\t\t" + str(self.score2))
             print("\t" + str(self.down) + " | " + str(self.distance) + "\t\t" + str(int(self.field)))
-            m, s = divmod(self.time, 60)
-            print ("\tQuarter " + str(self.quarter) + "\t%02d:%02d\n" % (m, s))
+            if self.quarter <= 4:
+                m, s = divmod(self.time, 60)
+                print ("\tQuarter " + str(self.quarter) + "\t%02d:%02d\n" % (m, s))
+            if self.quarter > 4:
+                print("")
+                print("Game Over!")
+                if self.score1 > self.score2:
+                    print(self.team1.name + " wins by a score of " + str(self.score1) + " to " + str(self.score2) + "!")
+                elif self.score2 > self.score1:
+                    print(self.team2.name + " wins by a score of " + str(self.score2) + " to " + str(self.score1) + "!")
+                else:
+                    print(self.team1.name + " ties " + self.team2.name + " at " + str(self.score2) + " to " + str(self.score1))
 
         if possession == 1:
             team = self.team1
@@ -131,3 +140,46 @@ class Game(object):
         else:
             print(str(int(play)) + " yards")
             processPlay(play, "success", team, int(play))
+
+    def displayGame(self):
+        sys.stdout.write("|")
+        for i in range(99):
+            sys.stdout.write("-")
+        sys.stdout.write("|\n")
+        sys.stdout.flush()
+
+        for i in range(4):
+            sys.stdout.write("|")
+            for j in range(10):
+                sys.stdout.write("         |")
+            sys.stdout.write("\n")
+            sys.stdout.flush()
+
+        for i in range(10):
+            if (int(self.field) / 10 == i):
+                if int(self.field) % 10 == 0:
+                    sys.stdout.write("*         ")
+                else:
+                    sys.stdout.write("|")
+                    for i in range(int(self.field) % 10 - 1):
+                        sys.stdout.write(" ")
+                    sys.stdout.write("*")
+                    for i in range(10 - (int(self.field) % 10) - 1):
+                        sys.stdout.write(" ")
+            else:
+                sys.stdout.write("|         ")
+        sys.stdout.write("|\n")
+        sys.stdout.flush()
+
+        for i in range(4):
+            sys.stdout.write("|")
+            for j in range(10):
+                sys.stdout.write("         |")
+            sys.stdout.write("\n")
+            sys.stdout.flush()
+
+        sys.stdout.write("|")
+        for i in range(99):
+            sys.stdout.write("-")
+        sys.stdout.write("|\n\n")
+        sys.stdout.flush()

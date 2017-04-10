@@ -38,7 +38,17 @@ team1.buildTeam(rushingData, passingData, kickingData, returningData, puntingDat
 team2 = Team(name2)
 team2.buildTeam(rushingData, passingData, kickingData, returningData, puntingData, downData, playData)
 
-game = Game(team1, team2)
-game.startGame()
-while(game.quarter == 1):
-    game.playGame(game.possession)
+fileWriter = open("output.txt", 'w')
+for i in range(1):
+    game = Game(team1, team2)
+    game.startGame()
+    while(game.quarter <= 4):
+        game.playGame(game.possession)
+        game.displayGame()
+    if game.score1 > game.score2:
+        fileWriter.write(game.team1.name + "\n")
+    elif game.score2 > game.score1:
+        fileWriter.write(game.team2.name + "\n")
+    else:
+        fileWriter.write("Tie\n")
+fileWriter.close()

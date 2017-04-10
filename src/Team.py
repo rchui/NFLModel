@@ -71,7 +71,11 @@ class Team(object):
 
             if random.random() < 0.80: # short pass
                 print("Short Pass " + random.choice(direct) +  ": ")
-                return round(random.uniform(0, self.passYA) - random.randint(0, round(self.passYA)) + random.randint(2, round(self.passYA)))
+                if random.random < self.passComp:
+                    return round(random.uniform(0, self.passYA) - random.randint(0, round(self.passYA)) + random.randint(2, round(self.passYA)))
+                else:
+                    return 0
+
             else: # long pass:
                 choice = random.random()
                 if choice < 0.4:
@@ -81,7 +85,10 @@ class Team(object):
                 else:
                     direct = "Middle"
                 print("Long Pass " + direct + ": ")
-                return max(round(random.uniform(self.passYA, self.passLong) - random.randint(round(self.passYA), round(self.passLong))), 10)
+                if random.random() < self.passComp:
+                    return max(round(random.uniform(self.passYA, self.passLong) - random.randint(round(self.passYA), round(self.passLong))), 10)
+                else:
+                    return 0
 
         def rushing():
             """ Determines rushing distance """

@@ -22,7 +22,7 @@ class Team(object):
 
         # Passing data
         self.passYA = passingData[self.name][4]
-        self.passComp = passingData[self.name][2]
+        self.passComp = passingData[self.name][2] / 100
         self.passLong = passingData[self.name][5]
 
         # Kick return data
@@ -32,11 +32,11 @@ class Team(object):
         self.returnPLong = returningData[self.name][8]
 
         # Field goal data
-        self.fgComp = kickingData[self.name][2]
+        self.fgComp = kickingData[self.name][2] / 100
         self.fgLong = kickingData[self.name][3]
 
         # Extra Point data
-        self.epComp = kickingData[self.name][6]
+        self.epComp = kickingData[self.name][6] / 100
 
         # Punting data
         self.puntYA = puntingData[self.name][3]
@@ -55,6 +55,14 @@ class Team(object):
         self.rushLeftTackle = self.rushLeftGuard + 0.058
         self.rushRightTackle = self.rushLeftTackle + 0.058
 
+        self.rushCenterProb = 0.3453
+        self.rushRightEndProb = 0.2155
+        self.rushLeftEndProb = 0.1381
+        self.rushRightGuardProb = 0.1050
+        self.rushLeftGuardProb = 0.081
+        self.rushLeftTackleProb = 0.058
+        self.rushRightTackleProb = 0.058
+
     def nextPlay(self, down, distance, field):
         """ Determines the next play by the team.
 
@@ -71,7 +79,7 @@ class Team(object):
 
             if random.random() < 0.80: # short pass
                 print("Short Pass " + random.choice(direct) +  ": ")
-                if random.random < self.passComp:
+                if random.random() < self.passComp:
                     return round(random.uniform(0, self.passYA) - random.randint(0, round(self.passYA)) + random.randint(2, round(self.passYA)))
                 else:
                     return 0
@@ -179,3 +187,127 @@ class Team(object):
             else:
                 return "punt"
 
+    def playProb(self, down, distance, field):
+        def passing(prob):
+            """ Determines passing distance """
+            direct = ["Left", "Right", "Middle"]
+
+            if random.random() < 0.80: # short pass
+                prob *= 0.80
+                if random.random() < self.passComp:
+                    prob *= self.passComp
+                    return "pass short", prob
+                else:
+                    prob *= 1 - self.passComp
+                    return "pass short", prob
+
+            else: # long pass:
+                choice = random.random()
+                if choice < 0.4:
+                    prob *= 0.4
+                elif choice < 0.8:
+                    prob *= 0.4
+                else:
+                    prob *= 0.2
+                if random.random() < self.passComp:
+                    prob *= self.passComp
+                    return "pass long", prob
+                else:
+                    prob *= 1 - self.passComp
+                    return "pass long", prob
+
+        def rushing(prob):
+            """ Determines rushing distance """
+            playPer = random.random()
+            perTracker = 0
+            
+            if playPer < (self.rushCenter):
+                prob *= self.rushCenterProb
+                return "rush center", prob
+            perTracker += self.rushCenter
+            
+            if playPer < self.rushRightEnd:
+                prob *= self.rushRightEndProb
+                return "rush right end", prob
+            perTracker += self.rushRightEnd
+            
+            if playPer < self.rushLeftEnd:
+                prob *= self.rushLeftEndProb
+                return "rush left end", prob
+            perTracker += self.rushLeftEnd
+            
+            if playPer < self.rushRightGuard:
+                prob *= self.rushRightGuardProb
+                return "rush right guard", prob
+            perTracker += self.rushRightGuard
+            
+            if playPer < self.rushLeftGuard:
+                prob *= self.rushLeftGuardProb
+                return "rush left guard", prob
+            perTracker += self.rushLeftGuard
+
+            if playPer < self.rushLeftTackle:
+                prob *= self.rushLeftTackleProb
+                return "rush left tackle", prob
+            perTracker += self.rushLeftTackle
+            
+            prob *= self.rushRightTackleProb
+            return "rush right tackle", prob
+        prob = 1.0
+
+        if down == 1:
+            if self.rush1 > random.random():
+                prob *= self.rush1
+                return rushing(prob)
+            else:
+                prob *= self.pass1
+                return passing(prob)
+        elif down == 2:
+            if distance > 7:
+                return passing(prob)
+            elif distance < 4:
+                return rushing(prob)
+            else: # distance > 3 || distance < 7
+                prob *= 0.5
+                if random.random() > 0.5:
+                    return rushing(prob)
+                else:
+                    return passing(prob)
+        elif down == 3:
+            if distance > 4:
+                return passing(prob)
+            else: 
+                prob *= 0.5
+                if random.random() > 0.5:
+                    return rushing(prob)
+                else:
+                    return passing(prob)
+        else:
+            # Kick field goal if in range
+            if 100 - field + 17 <= self.fgLong and distance > 2:
+                return "fg", prob
+            # If close enough maybe go for it on 4th
+            elif 100 - field + 17 <= self.fgLong and distance  < 3:
+                if random.random() < 0.90:
+                    prob *= 0.90
+                    return "fg", prob
+                else:
+                    prob *= 0.10
+                    if distance == 1:
+                        return rushing(prob)
+                    else:
+                        return passing(prob)
+            # If close but not in range sometimes go for it
+            elif 100 - field > 50 and distance < 3:
+                if random.random() > 0.975:
+                    prob *= 1 - 0.975
+                    if distance == 1:
+                        return rushing(prob)
+                    else:
+                        return passing(prob)
+                else:
+                    prob *= 0.975
+                    return "punt", prob
+            # Otherwise punt
+            else:
+                return "punt", prob

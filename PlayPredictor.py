@@ -39,17 +39,16 @@ team = Team(name)
 team.buildTeam(rushingData, passingData, kickingData, returningData, puntingData, downData, playData)
 
 # Choose a play
-play = team.nextPlay(down, distance, field)
+play = ""
+percent = 0.0
+for i in range(1000):
+    tempPlay, tempPercent = team.playProb(down, distance, field)
+    if tempPercent > percent:
+        percent = tempPercent
+        play = tempPlay
 if play == "fg":
-    print("Attempting Field Goal: ")
-    if team.fgComp / 100 > random.random():
-        print(str(100 - field + 17) + " yard field goal completed\n")
-    else:
-        print(str(100 - field + 17) + " field goal missed\n")
+    print("Kicking field goal with " + str("{:3.2f}".format(percent * 100)) + "% probability")
 elif play == "punt":
-    print("Punting: ")
-    puntDeviation = (team.puntLong - team.puntYA) / 3
-    puntDistance = team.puntYA - random.randint(0, 3) * puntDeviation + random.randint(0, 3) * puntDeviation
-    print("Punted " + str(int(round(puntDistance))) + " yards\n")
+    print("Punting with " + str("{:3.2f}".format(percent * 100)) + "% probability")
 else:
-    print(str(int(play)) + " yards\n")
+    print(play + " with " + str("{:3.2f}".format(percent * 100)) + "% probability")
